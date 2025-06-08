@@ -4,19 +4,29 @@
     <title>演習課題5-2：外部APIの呼び出しテスト</title>
 </head>
 <body>
-    <h1 id="msg">何かのAPI</h1>
-    <form name="apiform"><p>
-        何かのフォーム：<input type="text" name="form_data">
-        <button type="button" id="btn1" onclick="some_api(this.form)">実行</button>
-    </p></form>
-    
-    <div id="result"></div>
+    <h1 id="msg">ランダムな犬の画像</h1>
+    <button type="button" id="btn1" onclick="some_api()">画像を取得</button>
+    <div id="result" style="margin-top:20px;"></div>
+
     <script>
-        async function some_api(myForm) {
-            // ここにコードを書く
-            document.getElementById("result").innerHTML += myForm.form_data.value+"<br />";
-            document.apiform.reset();
+        async function some_api() {
+            const endpoint = "https://dog.ceo/api/breeds/image/random";
+
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    document.getElementById("result").innerHTML = `<img src="${data.message}" alt="dog" width="300">`;
+                } else {
+                    document.getElementById("result").innerText = "画像を取得できませんでした。";
+                }
+            } catch (error) {
+                document.getElementById("result").innerText = "エラーが発生しました。";
+                console.error(error);
+            }
         }
     </script>
 </body>
 </html>
+
